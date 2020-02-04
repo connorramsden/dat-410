@@ -2,15 +2,22 @@ import numpy as np
 import pandas as pd
 from tensorflow import keras
 
-training = pd.read_csv('data/training_v2.csv', nrows=100)
+
+def read_data(data_file):
+    training_data = pd.read_csv(data_file)
+    pred = 'your code here'
+    return training_data, pred
 
 
-def hospital_model(y_new):
-    model = keras.Sequential(keras.layers.Dense(1))
-    model.compile(optimizer='adam', loss='mean_squared_error')
+def clean_data(train, pred):
+    id_columns = ['encounter_id', 'icu_id', 'hospital_id', 'patient_id']
+    numerical_data = train.select_dtypes(np.int64)
+    numerical_data = numerical_data.drop(id_columns, axis=1)
+    return numerical_data
 
-    return model.predict(y_new)
 
+training, prediction = read_data('data/training_v2.csv')
 
-prediction = hospital_model([7.0])
-print(prediction)
+num_data = clean_data(training, prediction)
+
+print(training.head())
