@@ -19,7 +19,7 @@ def house_model(y_new):
     # Build a model, train it, return the predicted value
     model = keras.Sequential(keras.layers.Dense(1))  # build our model
     model.compile(optimizer='adam', loss='mean_squared_error')  # compile the model w/ Adam optimizer and MSE loss algo.
-    model.fit(num_rooms, house_price, epochs=2500)  # send the model running. I'm GPU training so 2500 epoch is fast
+    model.fit(num_rooms, house_price, epochs=10000)  # send the model running. I'm GPU training so 2500 epoch is fast
     return model.predict(y_new)  # return the model's predicted data
 
 
