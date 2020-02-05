@@ -13,13 +13,13 @@ from tensorflow import keras
 def house_model(y_new):
     # should return the predicted value of y
     # The number of rooms in the given house
-    num_rooms = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], dtype=int)
+    num_rooms = np.array([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0], dtype=float)
     # The price of the house (in hundreds of thousands)
-    house_price = np.array([1, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5], dtype=float)
+    house_price = np.array([1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5], dtype=float)
     # Build a model, train it, return the predicted value
     model = keras.Sequential(keras.layers.Dense(1))  # build our model
-    model.compile(optimizer='adam', loss='mean_squared_error')  # compile the model w/ Adam optimizer and MSE loss algo.
-    model.fit(num_rooms, house_price, epochs=10000)  # send the model running. I'm GPU training so 2500 epoch is fast
+    model.compile(optimizer='sgd', loss='mean_squared_error')  # compile the model w/ Adam optimizer and MSE loss algo.
+    model.fit(num_rooms, house_price, epochs=2500)  # send the model running. I'm GPU training so 2500 epoch is fast
     return model.predict(y_new)  # return the model's predicted data
 
 
