@@ -4,7 +4,7 @@ from tensorflow import keras
 import sklearn.preprocessing as prep
 
 
-# Read in CSV files
+# Read in Training Data & Prediction Data CSV files
 def read_data(training_file, predictions_file):
     training_data = pd.read_csv(training_file)
     prediction_data = pd.read_csv(predictions_file)
@@ -19,14 +19,16 @@ def clean_data(training, predictions):
     generic_data = ['encounter_id', 'patient_id', 'hospital_id']
     target_data = ['hospital_death']
     exclude_cols = categorical_data + generic_data + target_data
+
+    # Set up desired data points for training features (exclude identifiers, non-numerical data, and our target point)
     numerical_data = [col for col in training.columns if col not in exclude_cols]
 
     # Set up training and prediction targets
-    training_target = training[target_data]
-    training_features = training[numerical_data]
-    prediction_features = predictions[numerical_data]
+    training_target = training[target_data]  # our target data point (hospital_death)
+    training_features = training[numerical_data]  # numeric points that could influence likelihood of death
+    prediction_features = predictions[numerical_data]  # points to compare training vs predictions
 
-    # Replace missing values with 0's
+    # Replace missing values with 0's (might influence data)
     training_features.fillna(0, inplace=True)
     prediction_features.fillna(0, inplace=True)
 
@@ -59,7 +61,11 @@ def main():
 
     trained_model = build_model(training_feat, training_targ)
     out_prediction = trained_model.predict(prediction_feat)
-    print(out_prediction)
+    result = pd.DataFrame()
+    result['encounter_id'] = pred['encounter_id']
+    result['hospital_death'] = out_prediction > 0.5
+    result['hospital_death'] = result['hospital_death'].astype(int)
+    result.to_csv('data/solution.csv', index=False)
 
 
 main()
