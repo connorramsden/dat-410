@@ -48,13 +48,13 @@ def build_model(training_features, training_target):
                               keras.layers.Dense(64, activation='relu'),
                               keras.layers.Dense(1, activation='tanh')])
     model.compile(optimizer='sgd', loss='mean_squared_error')
-    model.fit(training_features, training_target.values, epochs=5)
+    model.fit(training_features, training_target.values, epochs=500)
     return model
 
 
 def main():
-    training_data = 'data/training_v2.csv'
-    prediction_data = 'data/unlabeled.csv'
+    training_data = './data/training_v2.csv'
+    prediction_data = './data/unlabeled.csv'
 
     train, pred = read_data(training_data, prediction_data)
     training_targ, training_feat, prediction_feat = clean_data(train, pred)
@@ -63,8 +63,7 @@ def main():
     out_prediction = trained_model.predict(prediction_feat)
     result = pd.DataFrame()
     result['encounter_id'] = pred['encounter_id']
-    result['hospital_death'] = out_prediction > 0.5
-    result['hospital_death'] = result['hospital_death'].astype(int)
+    result['hospital_death'] = out_prediction
     result.to_csv('data/solution.csv', index=False)
 
 
